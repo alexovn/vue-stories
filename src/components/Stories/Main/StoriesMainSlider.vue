@@ -5,8 +5,13 @@
     :centeredSlides="swiperOptions.centeredSlides"
     :initialSlide="swiperOptions.initialSlide"
   >
-    <swiper-slide class="stories-main-slider__item" v-for="(story, i) in stories.stories" :key="i"
-      :style="{ backgroundColor: story.bg }">
+    <swiper-slide
+      class="stories-main-slider__item"
+      v-for="(story, i) in stories.stories"
+      :key="i"
+      :style="{ backgroundColor: story.bg }"
+      @click="slideTo(i)"
+    >
 
       <StoriesGroupSlider :mainStory="story" />
 
@@ -103,6 +108,10 @@ const isNextBtnHidden = computed(() => {
     return true;
   }
 });
+
+const slideTo = (i) => {
+  mainSlider.value.slideTo(i);
+};
 
 </script>
 
