@@ -1,21 +1,24 @@
 <template>
-  <swiper class="stories-group-slider"
+  <swiper
+    class="stories-group-slider"
+    :modules="swiperOptions.modules"
+    :pagination="swiperOptions.pagination"
   >
-    <swiper-slide class="stories-group-slider__item"
-      v-for="(story, i) in mainStory.storiesGroup"
-      :key="i"
-      :style="{ backgroundColor: story.bg }"
-    >
+    <swiper-slide class="stories-group-slider__item" v-for="(story, i) in mainStory.storiesGroup" :key="i"
+      :style="{ backgroundColor: story.bg }">
       <div class="stories-group-slider__item-title">
         {{ story.title }}
       </div>
     </swiper-slide>
+
+    <div class="swiper-pagination stories-group-slider__pagination"></div>
   </swiper>
 </template>
 
 <script setup>
-import {ref} from 'vue';
+import { ref } from 'vue';
 import { Swiper, SwiperSlide } from 'swiper/vue';
+import { Pagination } from 'swiper';
 import 'swiper/css';
 
 const props = defineProps({
@@ -26,6 +29,17 @@ const props = defineProps({
 });
 
 const swiperOptions = ref({
+  modules: [Pagination],
+  pagination: {
+    el: ".stories-group-slider__pagination",
+    type: "bullets",
+    clickable: false,
+    renderBullet: function (index, className) {
+      return (
+        '<div class="' + className + '">' + "<span>" + "</span>" + "</div>"
+      );
+    },
+  }
 });
 
 
@@ -33,6 +47,7 @@ const swiperOptions = ref({
 
 <style lang="scss" scoped>
 .stories-group-slider {
+  position: relative;
   width: 100%;
   height: 100%;
   overflow: hidden;
@@ -46,6 +61,53 @@ const swiperOptions = ref({
     &-title {}
 
     &-text {}
+  }
+
+  &__pagination {
+    display: flex;
+    justify-content: space-between;
+    position: absolute;
+    top: 2.3rem;
+    left: 0;
+    right: 0;
+    width: 100%;
+    z-index: 100;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.8s ease;
+
+    :deep(.swiper-pagination-bullet) {
+      position: relative;
+      width: 100%;
+      flex-shrink: 10;
+      border-radius: 999px;
+      height: 4px;
+      background-color: rgba(#1f2938, 0.16);
+      overflow: hidden;
+      box-shadow: 0 0 1px #00000059;
+
+      margin-right: 0.9rem;
+
+      &:first-child {
+        margin-left: 2rem;
+      }
+
+      &:last-child {
+        margin-right: 2rem;
+      }
+
+      span {
+        position: absolute;
+        background-color: #1f2938;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        border-radius: 999px;
+        transform: translateX(-100%);
+        transition: transform 0.3s ease;
+      }
+    }
   }
 }
 </style>

@@ -1,17 +1,8 @@
 <template>
-  <swiper class="stories-main-slider"
-    @swiper="setMainSlider"
-    :slides-per-view="swiperOptions.slidesPerView"
-    :centeredSlides="swiperOptions.centeredSlides"
-    :initialSlide="swiperOptions.initialSlide"
-  >
-    <swiper-slide
-      class="stories-main-slider__item"
-      v-for="(story, i) in stories.stories"
-      :key="i"
-      :style="{ backgroundColor: story.bg }"
-      @click="slideTo(i)"
-    >
+  <swiper class="stories-main-slider" @swiper="setMainSlider" :slides-per-view="swiperOptions.slidesPerView"
+    :centeredSlides="swiperOptions.centeredSlides" :initialSlide="swiperOptions.initialSlide">
+    <swiper-slide class="stories-main-slider__item" v-for="(story, i) in stories.stories" :key="i"
+      :style="{ backgroundColor: story.bg }" @click="slideTo(i)">
 
       <StoriesGroupSlider :mainStory="story" />
 
@@ -22,18 +13,10 @@
     </swiper-slide>
 
     <div class="stories-main-slider__nav">
-      <button
-        v-show="isPrevBtnHidden"
-        class="stories-main-slider__nav-prev"
-        @click="slidePrev()"
-      >
+      <button v-show="isPrevBtnHidden" class="stories-main-slider__nav-prev" @click="slidePrev()">
         Prev
       </button>
-      <button
-        v-show="isNextBtnHidden"
-        class="stories-main-slider__nav-next"
-        @click="slideNext()"
-      >
+      <button v-show="isNextBtnHidden" class="stories-main-slider__nav-next" @click="slideNext()">
         Next
       </button>
     </div>
@@ -130,6 +113,13 @@ const slideTo = (i) => {
     transform: scale(0.6);
     transition: transform 0.3s ease;
     position: relative;
+
+    &.swiper-slide-active {
+      :deep(.stories-group-slider__pagination) {
+        opacity: 1;
+        visibility: visible;
+      }
+    }
 
     &-btn {
       position: absolute;

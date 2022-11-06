@@ -27,7 +27,31 @@ export const useStoriesStore = defineStore('stories', {
               text: '',
               img: '',
               bg: '#BCE29E'
-            }
+            },
+            {
+              title: '#DEF5E5',
+              text: '',
+              img: '',
+              bg: '#DEF5E5'
+            },
+            {
+              title: '#BCEAD5',
+              text: '',
+              img: '',
+              bg: '#BCEAD5'
+            },
+            {
+              title: '#9ED5C5',
+              text: '',
+              img: '',
+              bg: '#9ED5C5'
+            },
+            {
+              title: '#8EC3B0',
+              text: '',
+              img: '',
+              bg: '#8EC3B0'
+            },
           ]
         },
         {
@@ -58,28 +82,16 @@ export const useStoriesStore = defineStore('stories', {
         },
         {
           id: 3,
-          title: '#B7C4CF',
+          title: '#D7C0AE',
           img: '',
-          bg: '#B7C4CF',
+          bg: '#D7C0AE',
           storiesGroup: [
-            {
-              title: '#B7C4CF',
-              text: '',
-              img: '',
-              bg: '#B7C4CF'
-            },
             {
               title: '#D7C0AE',
               text: '',
               img: '',
               bg: '#D7C0AE'
             },
-            {
-              title: '#967E76',
-              text: '',
-              img: '',
-              bg: '#967E76'
-            }
           ]
         },
         {
