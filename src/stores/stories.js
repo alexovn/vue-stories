@@ -11,7 +11,7 @@ export const useStoriesStore = defineStore('stories', {
           bg: '#FF8787',
           storiesGroup: [
             {
-              title: '##FF8787',
+              title: '#FF8787',
               text: '',
               img: '',
               bg: '##FF8787'

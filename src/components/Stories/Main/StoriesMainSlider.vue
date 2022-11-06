@@ -1,11 +1,14 @@
 <template>
-  <swiper class="stories-main-slider" @swiper="setMainSlider" :slides-per-view="swiperOptions.slidesPerView"
-    :centeredSlides="swiperOptions.centeredSlides" :initialSlide="swiperOptions.initialSlide"
-    @slideChange="onSlideChange">
+  <swiper class="stories-main-slider"
+    @swiper="setMainSlider"
+    :slides-per-view="swiperOptions.slidesPerView"
+    :centeredSlides="swiperOptions.centeredSlides"
+    :initialSlide="swiperOptions.initialSlide"
+  >
     <swiper-slide class="stories-main-slider__item" v-for="(story, i) in stories.stories" :key="i"
       :style="{ backgroundColor: story.bg }">
 
-      <StoriesGroupSlider ref="groupSlider" @swiper="setGroupSlider" :mainStory="story" />
+      <StoriesGroupSlider :mainStory="story" />
 
       <button class="stories-main-slider__item-btn" @click="closeStory">
         <IconClose />
@@ -14,10 +17,18 @@
     </swiper-slide>
 
     <div class="stories-main-slider__nav">
-      <button @click="slidePrev()" class="stories-main-slider__nav-prev">
+      <button
+        v-show="isPrevBtnHidden"
+        class="stories-main-slider__nav-prev"
+        @click="slidePrev()"
+      >
         Prev
       </button>
-      <button @click="slideNext()" class="stories-main-slider__nav-next">
+      <button
+        v-show="isNextBtnHidden"
+        class="stories-main-slider__nav-next"
+        @click="slideNext()"
+      >
         Next
       </button>
     </div>
@@ -25,7 +36,7 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 import { useStoriesStore } from '@/stores/stories';
 import { Swiper, SwiperSlide } from 'swiper/vue';
 
@@ -35,16 +46,17 @@ import 'swiper/css';
 
 const stories = useStoriesStore();
 const mainSlider = ref(null);
-const groupSlider = ref(null);
-const activeSlide = ref(null);
+
+const activeSlide = computed(() => {
+  return mainSlider.value.slides[mainSlider.value.activeIndex];
+});
+
+const sliderGroup = computed(() => {
+  return activeSlide.value.querySelector('.stories-group-slider');
+});
 
 const setMainSlider = (swiper) => {
   mainSlider.value = swiper;
-  activeSlide.value = mainSlider.value.slides[mainSlider.value.activeIndex];
-};
-
-const setGroupSlider = (swiper) => {
-  groupSlider.value = swiper;
 };
 
 const swiperOptions = ref({
@@ -59,27 +71,38 @@ const closeStory = () => {
 };
 
 const slideNext = () => {
-  activeSlide.value = mainSlider.value.slides[mainSlider.value.activeIndex];
-  const sliderGroup = activeSlide.value.querySelector('.stories-group-slider');
-
-  if (!sliderGroup.swiper.isEnd) {
-    sliderGroup.swiper.slideNext();
+  if (!sliderGroup.value.swiper.isEnd) {
+    sliderGroup.value.swiper.slideNext();
     return;
   }
   mainSlider.value.slideNext();
-
 };
 
 const slidePrev = () => {
-  activeSlide.value = mainSlider.value.slides[mainSlider.value.activeIndex];
-  const sliderGroup = activeSlide.value.querySelector('.stories-group-slider');
-
-  if (!sliderGroup.swiper.isBeginning) {
-    sliderGroup.swiper.slidePrev();
+  if (!sliderGroup.value.swiper.isBeginning) {
+    sliderGroup.value.swiper.slidePrev();
     return;
   }
   mainSlider.value.slidePrev();
 };
+
+const isPrevBtnHidden = computed(() => {
+  if (mainSlider.value) {
+    if (sliderGroup.value.swiper.isBeginning && mainSlider.value.isBeginning) {
+      return false;
+    }
+    return true;
+  }
+});
+
+const isNextBtnHidden = computed(() => {
+  if (mainSlider.value) {
+    if (sliderGroup.value.swiper.isEnd && mainSlider.value.isEnd) {
+      return false;
+    }
+    return true;
+  }
+});
 
 </script>
 
