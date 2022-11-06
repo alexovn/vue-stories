@@ -1,10 +1,20 @@
 <template>
-  <swiper class="stories-main-slider" @swiper="setMainSlider" :slides-per-view="swiperOptions.slidesPerView"
-    :centeredSlides="swiperOptions.centeredSlides" :initialSlide="swiperOptions.initialSlide">
+  <swiper
+    class="stories-main-slider"
+    :slides-per-view="swiperOptions.slidesPerView"
+    :centeredSlides="swiperOptions.centeredSlides"
+    :initialSlide="swiperOptions.initialSlide"
+    @swiper="setMainSlider"
+    @slideChange="onSlideChange"
+  >
     <swiper-slide class="stories-main-slider__item" v-for="(story, i) in stories.stories" :key="i"
       :style="{ backgroundColor: story.bg }" @click="slideTo(i)">
 
-      <StoriesGroupSlider :mainStory="story" />
+      <StoriesGroupSlider
+        :mainStory="story"
+        @swiper="setGroupSlider"
+        @slideChange="onSlideChange"
+      />
 
       <button class="stories-main-slider__item-btn" @click="closeStory">
         <IconClose />
@@ -36,6 +46,9 @@ const speed = 500;
 
 const stories = useStoriesStore();
 const mainSlider = ref(null);
+const groupSlider = ref(null);
+const autoplayDelay = 5000;
+let interval = null;
 
 const activeSlide = computed(() => {
   return mainSlider.value.slides[mainSlider.value.activeIndex];
@@ -47,6 +60,11 @@ const sliderGroup = computed(() => {
 
 const setMainSlider = (swiper) => {
   mainSlider.value = swiper;
+  setProgress();
+};
+
+const setGroupSlider = (swiper) => {
+  groupSlider.value = swiper;
 };
 
 const swiperOptions = ref({
@@ -56,6 +74,7 @@ const swiperOptions = ref({
 });
 
 const closeStory = () => {
+  stopProgress();
   stories.isStoriesActive = false;
   stories.storyIndex = null;
 };
@@ -97,6 +116,59 @@ const isNextBtnHidden = computed(() => {
 const slideTo = (i) => {
   mainSlider.value.slideTo(i, speed);
 };
+
+const setProgress = () => {
+  const bullets = sliderGroup.value.querySelectorAll('.swiper-pagination-bullet');
+  const time = autoplayDelay / 100;
+
+  bullets.forEach((bullet, index) => {
+    const span = bullet.querySelector('span');
+    span.style.transform = 'translateX(-100%)';
+
+    if (index === sliderGroup.value.swiper.activeIndex) {
+      let transform = -100;
+
+      interval = setInterval(() => {
+        if (transform < 0) {
+          transform += 1;
+        }
+        span.style.transform = `translateX(${transform}%)`;
+
+        if (sliderGroup.value.swiper.isEnd && transform === 0) {
+          stopProgress();
+
+          const isNext = mainSlider.value.slideNext();
+
+          if (!isNext) {
+            closeStory();
+          }
+
+          mainSlider.value.slideNext(speed);
+
+        } else if (transform === 0) {
+          sliderGroup.value.swiper.slideNext(speed);
+        }
+
+      }, time);
+
+    } else if (index < sliderGroup.value.swiper.activeIndex) {
+      span.style.transform = `translateX(0%)`;
+    }
+
+  });
+
+};
+
+const stopProgress = () => {
+  clearInterval(interval);
+};
+
+const onSlideChange = () => {
+  if (mainSlider.value) {
+    stopProgress();
+    setProgress();
+  }
+}
 
 </script>
 
