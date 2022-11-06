@@ -49,6 +49,8 @@ import StoriesGroupSlider from '@/components/Stories/Group/StoriesGroupSlider.vu
 import IconClose from '@/components/Icon/IconClose.vue';
 import 'swiper/css';
 
+const speed = 500;
+
 const stories = useStoriesStore();
 const mainSlider = ref(null);
 
@@ -77,7 +79,7 @@ const closeStory = () => {
 
 const slideNext = () => {
   if (!sliderGroup.value.swiper.isEnd) {
-    sliderGroup.value.swiper.slideNext();
+    sliderGroup.value.swiper.slideNext(speed);
     return;
   }
   mainSlider.value.slideNext();
@@ -85,7 +87,7 @@ const slideNext = () => {
 
 const slidePrev = () => {
   if (!sliderGroup.value.swiper.isBeginning) {
-    sliderGroup.value.swiper.slidePrev();
+    sliderGroup.value.swiper.slidePrev(speed);
     return;
   }
   mainSlider.value.slidePrev();
@@ -110,7 +112,7 @@ const isNextBtnHidden = computed(() => {
 });
 
 const slideTo = (i) => {
-  mainSlider.value.slideTo(i);
+  mainSlider.value.slideTo(i, speed);
 };
 
 </script>
