@@ -1,0 +1,18 @@
+@import 'reset.scss';
+@import 'fonts.scss';
+@import 'typography.scss';
+
+:root {
+  font-size: 16px;
+}
+
+body {
+  font-family: 'Open Sans';
+  font-weight: 400;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1.25rem;
+}
