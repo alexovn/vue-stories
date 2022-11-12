@@ -1,7 +1,13 @@
 <template>
-  <swiper class="stories-main-slider" :slides-per-view="swiperOptions.slidesPerView"
-    :centeredSlides="swiperOptions.centeredSlides" :initialSlide="swiperOptions.initialSlide" @swiper="setMainSlider"
-    @slideChange="onSlideChange">
+  <swiper class="stories-main-slider"
+    :slides-per-view="swiperOptions.slidesPerView"
+    :centeredSlides="swiperOptions.centeredSlides"
+    :initialSlide="swiperOptions.initialSlide"
+    @swiper="setMainSlider"
+    @slideChange="onSlideChange"
+    @touchStart="onTouchStart"
+    @touchEnd="onTouchEnd"
+  >
 
     <swiper-slide class="stories-main-slider__item" v-for="(story, i) in stories.stories" :key="i"
       :style="{ backgroundColor: story.bg }" @click="slideTo(i)">
@@ -14,14 +20,16 @@
 
     </swiper-slide>
 
-    <div class="stories-main-slider__nav">
+    <div class="stories-main-slider__nav"
+      @touchstart="onTouchStart"
+      @touchend="onTouchEnd"
+    >
       <button v-show="isPrevBtnHidden" class="stories-main-slider__nav-prev" @click="slidePrev()">
         Prev
       </button>
       <button v-show="isNextBtnHidden" class="stories-main-slider__nav-next" @click="slideNext()">
         Next
       </button>
-
     </div>
 
     <button class="close-btn stories-main-slider__btn" @click="closeStory">
@@ -40,12 +48,12 @@ import StoriesGroupSlider from '@/components/Stories/Group/StoriesGroupSlider.vu
 import IconClose from '@/components/Icon/IconClose.vue';
 import 'swiper/css';
 
-const speed = 500;
-
 const stories = useStoriesStore();
 const mainSlider = ref(null);
 const groupSlider = ref(null);
 const autoplayDelay = 5000;
+const speed = 500;
+const isPaused = ref(false);
 let interval = null;
 
 const activeSlide = computed(() => {
@@ -58,7 +66,7 @@ const sliderGroup = computed(() => {
 
 const setMainSlider = (swiper) => {
   mainSlider.value = swiper;
-  // setProgress();
+  setProgress();
 };
 
 const setGroupSlider = (swiper) => {
@@ -127,17 +135,16 @@ const setProgress = () => {
       let transform = -100;
 
       interval = setInterval(() => {
-        if (transform < 0) {
+        if (transform < 0 && !isPaused.value) {
           transform += 1;
         }
+
         span.style.transform = `translateX(${transform}%)`;
 
         if (sliderGroup.value.swiper.isEnd && transform === 0) {
           stopProgress();
 
-          const isNext = mainSlider.value.slideNext();
-
-          if (!isNext) {
+          if (mainSlider.value.isEnd) {
             closeStory();
           }
 
@@ -166,7 +173,15 @@ const onSlideChange = () => {
     stopProgress();
     setProgress();
   }
-}
+};
+
+const onTouchStart = () => {
+  isPaused.value = true;
+};
+
+const onTouchEnd = () => {
+  isPaused.value = false;
+};
 
 </script>
 
