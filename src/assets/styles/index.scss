@@ -4,6 +4,13 @@
 
 :root {
   font-size: 16px;
+  @include r($md) {
+    font-size: 12px;
+  }
+
+  @include r($sm) {
+    font-size: 10px;
+  }
 }
 
 body {
@@ -15,4 +22,17 @@ body {
   max-width: 1200px;
   margin: 0 auto;
   padding: 0 1.25rem;
+}
+
+.close-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  transition: opacity 0.3s ease;
+
+  :deep(svg) {
+    width: 100%;
+    height: 100%;
+  }
 }

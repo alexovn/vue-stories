@@ -1,22 +1,14 @@
 <template>
-  <swiper
-    class="stories-main-slider"
-    :slides-per-view="swiperOptions.slidesPerView"
-    :centeredSlides="swiperOptions.centeredSlides"
-    :initialSlide="swiperOptions.initialSlide"
-    @swiper="setMainSlider"
-    @slideChange="onSlideChange"
-  >
+  <swiper class="stories-main-slider" :slides-per-view="swiperOptions.slidesPerView"
+    :centeredSlides="swiperOptions.centeredSlides" :initialSlide="swiperOptions.initialSlide" @swiper="setMainSlider"
+    @slideChange="onSlideChange">
+
     <swiper-slide class="stories-main-slider__item" v-for="(story, i) in stories.stories" :key="i"
       :style="{ backgroundColor: story.bg }" @click="slideTo(i)">
 
-      <StoriesGroupSlider
-        :mainStory="story"
-        @swiper="setGroupSlider"
-        @slideChange="onSlideChange"
-      />
+      <StoriesGroupSlider :mainStory="story" @swiper="setGroupSlider" @slideChange="onSlideChange" />
 
-      <button class="stories-main-slider__item-btn" @click="closeStory">
+      <button class="close-btn stories-main-slider__item-btn" @click="closeStory">
         <IconClose />
       </button>
 
@@ -29,7 +21,13 @@
       <button v-show="isNextBtnHidden" class="stories-main-slider__nav-next" @click="slideNext()">
         Next
       </button>
+
     </div>
+
+    <button class="close-btn stories-main-slider__btn" @click="closeStory">
+      <IconClose />
+    </button>
+
   </swiper>
 </template>
 
@@ -60,7 +58,7 @@ const sliderGroup = computed(() => {
 
 const setMainSlider = (swiper) => {
   mainSlider.value = swiper;
-  setProgress();
+  // setProgress();
 };
 
 const setGroupSlider = (swiper) => {
@@ -186,8 +184,28 @@ const onSlideChange = () => {
     transition: transform 0.3s ease;
     position: relative;
 
+    @include r($md) {
+      margin: 0 5vw;
+      width: 32rem;
+      height: 52rem;
+      transform: scale(0.8);
+    }
+
+    @include r($sm) {
+      margin: 0;
+      width: 100vw;
+      height: 100vh;
+    }
+
     &.swiper-slide-active {
+      transform: scale(1);
+
       :deep(.stories-group-slider__pagination) {
+        opacity: 1;
+        visibility: visible;
+      }
+
+      .stories-main-slider__item-btn {
         opacity: 1;
         visibility: visible;
       }
@@ -197,24 +215,16 @@ const onSlideChange = () => {
       position: absolute;
       top: -1.5rem;
       right: -1.5rem;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: transparent;
-
+      
       width: 1.5rem;
       height: 1.5rem;
 
-      :deep(svg) {
-        width: 100%;
-        height: 100%;
-      }
-    }
+      opacity: 0;
+      visibility: hidden;
 
-    &.swiper-slide-active {
-      width: 25rem;
-      height: 37.5rem;
-      transform: scale(1);
+      @include r($sm) {
+        display: none;
+      }
     }
   }
 
@@ -226,11 +236,25 @@ const onSlideChange = () => {
     width: 35rem;
     z-index: 100;
 
+    @include r($md) {
+      width: 43rem;
+    }
+
+    @include r($sm) {
+      width: 100%;
+      height: 100%;
+    }
+
     &-prev,
     &-next {
       padding: 0.5rem;
       position: absolute;
       background: transparent;
+
+      @include r($sm) {
+        width: 50%;
+        height: 100%;
+      }
     }
 
     &-prev {
@@ -239,6 +263,20 @@ const onSlideChange = () => {
 
     &-next {
       right: 0;
+    }
+  }
+
+  &__btn {
+    display: none;
+    
+    @include r($sm) {
+      position: absolute;
+      display: flex;
+      top: 4.2rem;
+      right: 1.7rem;
+      width: 2.2rem;
+      height: 2.2rem;
+      z-index: 200;
     }
   }
 }
