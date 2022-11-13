@@ -4,8 +4,12 @@
     :modules="swiperOptions.modules"
     :pagination="swiperOptions.pagination"
   >
-    <swiper-slide class="stories-group-slider__item" v-for="(story, i) in mainStory.storiesGroup" :key="i"
-      :style="{ backgroundColor: story.bg }">
+    <swiper-slide
+      class="stories-group-slider__item"
+      :style="{ backgroundColor: story.bg }"
+      v-for="(story, i) in mainStory.storiesGroup"
+      :key="i"
+    >
       <div class="stories-group-slider__item-title">
         {{ story.title }}
       </div>

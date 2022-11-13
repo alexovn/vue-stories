@@ -9,12 +9,24 @@
     @touchEnd="onTouchEnd"
   >
 
-    <swiper-slide class="stories-main-slider__item" v-for="(story, i) in stories.stories" :key="i"
-      :style="{ backgroundColor: story.bg }" @click="slideTo(i)">
+    <swiper-slide
+      class="stories-main-slider__item"
+      :style="{ backgroundColor: story.bg }"
+      v-for="(story, i) in stories.stories"
+      :key="i"
+      @click="slideTo(i, speed)"
+    >
 
-      <StoriesGroupSlider :mainStory="story" @swiper="setGroupSlider" @slideChange="onSlideChange" />
+      <StoriesGroupSlider
+        :mainStory="story"
+        @swiper="setGroupSlider"
+        @slideChange="onSlideChange"
+      />
 
-      <button class="close-btn stories-main-slider__item-btn" @click="closeStory">
+      <button
+        class="close-btn stories-main-slider__item-btn"
+        @click="closeStory"
+      >
         <IconClose />
       </button>
 
@@ -24,15 +36,26 @@
       @touchstart="onTouchStart"
       @touchend="onTouchEnd"
     >
-      <button v-show="isPrevBtnHidden" class="stories-main-slider__nav-prev" @click="slidePrev()">
+      <button
+        class="stories-main-slider__nav-prev"
+        v-show="isPrevBtnHidden"
+        @click="slidePrev()"
+      >
         Prev
       </button>
-      <button v-show="isNextBtnHidden" class="stories-main-slider__nav-next" @click="slideNext()">
+      <button
+        class="stories-main-slider__nav-next"
+        v-show="isNextBtnHidden"
+        @click="slideNext()"
+      >
         Next
       </button>
     </div>
 
-    <button class="close-btn stories-main-slider__btn" @click="closeStory">
+    <button
+      class="close-btn stories-main-slider__btn"
+      @click="closeStory"
+    >
       <IconClose />
     </button>
 
@@ -51,22 +74,31 @@ import 'swiper/css';
 const stories = useStoriesStore();
 const mainSlider = ref(null);
 const groupSlider = ref(null);
-const autoplayDelay = 5000;
-const speed = 500;
+const autoplayDelay = ref(5000);
+const speed = ref(500);
 const isPaused = ref(false);
-let interval = null;
+let interval = ref(null);
 
 const activeSlide = computed(() => {
-  return mainSlider.value.slides[mainSlider.value.activeIndex];
+  return mainSlider.value?.slides[activeIndex.value];
 });
 
 const sliderGroup = computed(() => {
   return activeSlide.value.querySelector('.stories-group-slider');
 });
 
+const activeIndex = computed(() => {
+    return mainSlider.value?.activeIndex;
+});
+
+const setActiveIndex = () => {
+  stories.storyIndex = activeIndex.value;
+};
+
 const setMainSlider = (swiper) => {
   mainSlider.value = swiper;
   setProgress();
+  slideTo(stories.storyIndex);
 };
 
 const setGroupSlider = (swiper) => {
@@ -76,7 +108,6 @@ const setGroupSlider = (swiper) => {
 const swiperOptions = ref({
   slidesPerView: 'auto',
   centeredSlides: true,
-  initialSlide: stories.storyIndex,
 });
 
 const closeStory = () => {
@@ -87,7 +118,7 @@ const closeStory = () => {
 
 const slideNext = () => {
   if (!sliderGroup.value.swiper.isEnd) {
-    sliderGroup.value.swiper.slideNext(speed);
+    sliderGroup.value.swiper.slideNext(speed.value);
     return;
   }
   mainSlider.value.slideNext();
@@ -95,7 +126,7 @@ const slideNext = () => {
 
 const slidePrev = () => {
   if (!sliderGroup.value.swiper.isBeginning) {
-    sliderGroup.value.swiper.slidePrev(speed);
+    sliderGroup.value.swiper.slidePrev(speed.value);
     return;
   }
   mainSlider.value.slidePrev();
@@ -119,13 +150,13 @@ const isNextBtnHidden = computed(() => {
   }
 });
 
-const slideTo = (i) => {
+const slideTo = (i, speed = 0) => {
   mainSlider.value.slideTo(i, speed);
 };
 
 const setProgress = () => {
   const bullets = sliderGroup.value.querySelectorAll('.swiper-pagination-bullet');
-  const time = autoplayDelay / 100;
+  const time = autoplayDelay.value / 100;
 
   bullets.forEach((bullet, index) => {
     const span = bullet.querySelector('span');
@@ -134,24 +165,19 @@ const setProgress = () => {
     if (index === sliderGroup.value.swiper.activeIndex) {
       let transform = -100;
 
-      interval = setInterval(() => {
-        if (transform < 0 && !isPaused.value) {
-          transform += 1;
-        }
+      interval.value = setInterval(() => {
 
+        transform < 0 && !isPaused.value ? transform += 1 : false;
         span.style.transform = `translateX(${transform}%)`;
 
         if (sliderGroup.value.swiper.isEnd && transform === 0) {
           stopProgress();
 
-          if (mainSlider.value.isEnd) {
-            closeStory();
-          }
-
-          mainSlider.value.slideNext(speed);
+          mainSlider.value.isEnd ? closeStory() : false;
+          mainSlider.value.slideNext(speed.value);
 
         } else if (transform === 0) {
-          sliderGroup.value.swiper.slideNext(speed);
+          sliderGroup.value.swiper.slideNext(speed.value);
         }
 
       }, time);
@@ -165,14 +191,12 @@ const setProgress = () => {
 };
 
 const stopProgress = () => {
-  clearInterval(interval);
+  clearInterval(interval.value);
 };
 
 const onSlideChange = () => {
-  if (mainSlider.value) {
-    stopProgress();
-    setProgress();
-  }
+  mainSlider.value ? (stopProgress(), setProgress()) : false;
+  setActiveIndex();
 };
 
 const onTouchStart = () => {

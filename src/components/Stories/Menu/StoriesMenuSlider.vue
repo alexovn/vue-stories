@@ -1,8 +1,10 @@
 <template>
-  <swiper class="stories-menu-slider"
+  <swiper
+    class="stories-menu-slider"
     :slides-per-view="swiperOptions.slidesPerView"
   >
-    <swiper-slide class="stories-menu-slider__item"
+    <swiper-slide
+      class="stories-menu-slider__item"
       v-for="(story, index) in stories.stories"
       :key="story.id"
       :style="{ backgroundColor: story.bg }"
