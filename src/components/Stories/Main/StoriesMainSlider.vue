@@ -1,5 +1,6 @@
 <template>
   <swiper class="stories-main-slider"
+    ref="storiesMainSlider"
     :slides-per-view="swiperOptions.slidesPerView"
     :centeredSlides="swiperOptions.centeredSlides"
     :initialSlide="swiperOptions.initialSlide"
@@ -78,6 +79,7 @@ const autoplayDelay = ref(5000);
 const speed = ref(500);
 const isPaused = ref(false);
 let interval = ref(null);
+const storiesMainSlider = ref(null);
 
 const activeSlide = computed(() => {
   return mainSlider.value?.slides[activeIndex.value];
@@ -206,6 +208,10 @@ const onTouchStart = () => {
 const onTouchEnd = () => {
   isPaused.value = false;
 };
+
+defineExpose({
+  closeStory
+});
 
 </script>
 
