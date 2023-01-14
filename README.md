@@ -1,6 +1,6 @@
 # vue-stories
 
-Demo: <https://alexovn.github.io/vue-stories/)>
+Demo: <https://alexovn.github.io/vue-stories/>
 
 ## Project Setup
 
