@@ -1,16 +1,8 @@
 <template>
-  <swiper
-    class="stories-group-slider"
-    :modules="swiperOptions.modules"
-    :pagination="swiperOptions.pagination"
-  >
-    <swiper-slide
-      class="stories-group-slider__item"
-      :style="{ backgroundColor: story.bg }"
-      v-for="(story, i) in mainStory.storiesGroup"
-      :key="i"
-    >
-      <div class="stories-group-slider__item-title">
+  <swiper class="stories-group-slider" :modules="swiperOptions.modules" :pagination="swiperOptions.pagination">
+    <swiper-slide class="stories-group-slider__item" :style="{ backgroundColor: story.bg }"
+      v-for="(story, i) in mainStory.storiesGroup" :key="i">
+      <div class="stories-group-slider__item-body">
         {{ story.title }}
       </div>
     </swiper-slide>
@@ -56,22 +48,34 @@ const swiperOptions = ref({
   height: 100%;
   overflow: hidden;
   border-radius: 0.75rem;
+  @include r($sm) {
+    border-radius: 0;
+  }
 
   &__item {
     padding: 0.5rem;
     width: 100%;
     height: 100%;
 
-    &-title {}
+    &-body {
+      @include text20;
+      display: flex;
+      width: 100%;
+      height: 100%;
+      align-items: center;
+      justify-content: center;
 
-    &-text {}
+      @include r($sm) {
+        font-size: 25px;
+      }
+    }
   }
 
   &__pagination {
     display: flex;
     justify-content: space-between;
     position: absolute;
-    top: 2.3rem;
+    top: 2rem;
     left: 0;
     right: 0;
     width: 100%;
@@ -79,6 +83,10 @@ const swiperOptions = ref({
     opacity: 0;
     visibility: hidden;
     transition: opacity 0.8s ease;
+
+    @include r($sm) {
+      top: 4rem;
+    }
 
     :deep(.swiper-pagination-bullet) {
       position: relative;

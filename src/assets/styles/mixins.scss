@@ -4,7 +4,7 @@
   }
 }
 
-@mixin rm($width) {
+@mixin rmin($width) {
   @media only screen and (min-width: ($width + 1) + 'px') {
     @content;
   }

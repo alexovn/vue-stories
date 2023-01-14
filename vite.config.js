@@ -19,6 +19,7 @@ export default defineConfig(({mode}) => {
           additionalData: `
             @import "@/assets/styles/mixins.scss";
             @import "@/assets/styles/vars.scss";
+            @import "@/assets/styles/typography.scss";
           `
         }
       }

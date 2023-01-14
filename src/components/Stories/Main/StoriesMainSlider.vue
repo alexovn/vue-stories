@@ -42,14 +42,14 @@
         v-show="isPrevBtnHidden"
         @click="slidePrev()"
       >
-        Prev
+        <IconChevronRight />
       </button>
       <button
         class="stories-main-slider__nav-next"
         v-show="isNextBtnHidden"
         @click="slideNext()"
       >
-        Next
+        <IconChevronRight />
       </button>
     </div>
 
@@ -70,6 +70,7 @@ import { Swiper, SwiperSlide } from 'swiper/vue';
 
 import StoriesGroupSlider from '@/components/Stories/Group/StoriesGroupSlider.vue';
 import IconClose from '@/components/Icon/IconClose.vue';
+import IconChevronRight from '@/components/Icon/IconChevronRight.vue';
 import 'swiper/css';
 
 const stories = useStoriesStore();
@@ -222,17 +223,33 @@ defineExpose({
 
   &__item {
     margin: 0 10vw;
-    width: 25rem;
-    height: 37.5rem;
-    border-radius: 0.75rem;
+    width: 40rem;
+    height: 60rem;
+    border-radius: 1.6rem;
     transform: scale(0.6);
     transition: transform 0.3s ease;
     position: relative;
 
+    &.swiper-slide-prev,
+    &.swiper-slide-next {
+      cursor: pointer;
+    }
+
+    &.swiper-slide-prev {
+      &:hover {
+        transform: scale(0.6) translate(20%);
+      }
+    }
+    &.swiper-slide-next {
+      &:hover {
+        transform: scale(0.6) translate(-20%);
+      }
+    }
+
     @include r($md) {
       margin: 0 5vw;
-      width: 32rem;
-      height: 52rem;
+      width: 50rem;
+      height: 78rem;
       transform: scale(0.8);
     }
 
@@ -240,6 +257,7 @@ defineExpose({
       margin: 0;
       width: 100vw;
       height: 100vh;
+      border-radius: 0;
     }
 
     &.swiper-slide-active {
@@ -258,14 +276,25 @@ defineExpose({
 
     &-btn {
       position: absolute;
-      top: -1.5rem;
-      right: -1.5rem;
+      top: -5rem;
+      right: -5rem;
       
-      width: 1.5rem;
-      height: 1.5rem;
+      width: 5rem;
+      height: 5rem;
 
       opacity: 0;
       visibility: hidden;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      :deep(svg) {
+        width: 3rem;
+        height: 3rem;
+        max-width: 100%;
+        max-height: 100%;
+      }
 
       @include r($sm) {
         display: none;
@@ -278,11 +307,11 @@ defineExpose({
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 35rem;
+    width: 55rem;
     z-index: 100;
 
     @include r($md) {
-      width: 43rem;
+      width: 68rem;
     }
 
     @include r($sm) {
@@ -293,17 +322,45 @@ defineExpose({
     &-prev,
     &-next {
       padding: 0.5rem;
+      width: 5rem;
+      height: 5rem;
+      background-color: #fff;
+      border-radius: 100%;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
       position: absolute;
-      background: transparent;
+
+      transition: background-color 0.3s ease;
+
+      &:hover {
+        @include rmin($sm) {
+          background-color: #E8E8E8;
+        }
+      }
+
+      :deep(svg) {
+        width: 2.5rem;
+        height: 2.5rem;
+        max-width: 100%;
+        max-height: 100%;
+        @include r($sm) {
+          display: none;
+        }
+      }
 
       @include r($sm) {
         width: 50%;
         height: 100%;
+        background: transparent;
       }
     }
 
     &-prev {
       left: 0;
+      transform: rotate(180deg);
     }
 
     &-next {
@@ -314,14 +371,22 @@ defineExpose({
   &__btn {
     display: none;
     
+    
     @include r($sm) {
       position: absolute;
       display: flex;
-      top: 4.2rem;
-      right: 1.7rem;
-      width: 2.2rem;
-      height: 2.2rem;
+      top: 7.2rem;
+      right: 0.7rem;
+      width: 8rem;
+      height: 8rem;
       z-index: 200;
+
+      :deep(svg) {
+        width: 6rem;
+        height: 6rem;
+        max-width: 100%;
+        max-height: 100%;
+      }
     }
   }
 }

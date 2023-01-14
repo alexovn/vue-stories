@@ -42,9 +42,20 @@ const openStory = (index) => {
 
   &__item {
     padding: 0.5rem;
-    width: 12.5rem;
-    height: 12.5rem;
+    width: 25rem;
+    height: 25rem;
     border-radius: 0.75rem;
+    cursor: pointer;
+
+    @include r($md) {
+      width: 35rem;
+      height: 35rem;
+    }
+
+    @include r($sm) {
+      width: 40rem;
+      height: 40rem;
+    }
 
     &:not(:last-child) {
       margin-right: 2rem;
@@ -53,7 +64,13 @@ const openStory = (index) => {
     &-img {
       flex: 1;
     }
-    &-title {}
+    &-title {
+      @include text20;
+
+      @include r($sm) {
+        font-size: 16px;
+      }
+    }
   }
 
 }

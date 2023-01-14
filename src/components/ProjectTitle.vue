@@ -12,6 +12,7 @@
 
 <style lang="scss" scoped>
 .project-title {
-  margin-bottom: 2rem;
+  margin: 2rem 0;
+  text-align: center;
 }
 </style>

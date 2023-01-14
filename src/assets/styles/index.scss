@@ -1,27 +1,27 @@
-@import 'reset.scss';
-@import 'fonts.scss';
-@import 'typography.scss';
+@import 'reset';
+@import 'fonts';
 
+html,
 :root {
-  font-size: 16px;
+  font-size: calc(100vw / 1440 * 10);
   @include r($md) {
-    font-size: 12px;
+    font-size: calc(100vw / 991 * 10);
   }
 
-  @include r($sm) {
-    font-size: 10px;
-  }
+  transition: font-size .15s ease;
 }
 
 body {
   font-family: 'Open Sans';
   font-weight: 400;
+  font-size: 1.6rem;
 }
 
 .container {
-  max-width: 1200px;
+  width: 144rem;
+  max-width: 100%;
   margin: 0 auto;
-  padding: 0 1.25rem;
+  padding: 0 1.5rem;
 }
 
 .close-btn {
